@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  merge_group:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  # renovate: datasource=crate depName=cargo-deny versioning=semver
+  CARGO_DENY_VERSION: 0.16.3
+
+jobs:
+  changed-files:
+    name: Changed Files
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: tj-actions/changed-files@bab30c2299617f6615ec02a68b9a40d10bd21366 # v45.0.5
+        id: changed-files-rust
+        with:
+          files: |
+            migrations/**
+            src/**
+            Cargo.lock
+            Cargo.toml
+            rust-toolchain.toml
+
+      - uses: tj-actions/changed-files@bab30c2299617f6615ec02a68b9a40d10bd21366 # v45.0.5
+        id: changed-files-rust-lockfile
+        with:
+          files: Cargo.lock
+
+    outputs:
+      rust: ${{ steps.changed-files-rust.outputs.any_modified }}
+      rust-lockfile: ${{ steps.changed-files-rust-lockfile.outputs.any_modified }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    needs: changed-files
+    if: needs.changed-files.outputs.rust == 'true'
+
+    env:
+      RUSTFLAGS: "-D warnings"
+      RUSTDOCFLAGS: "-D warnings"
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+
+    services:
+      postgres:
+        image: postgres:latest@sha256:79c927b43c8bf2fc1e78b7f4badb394237ee0001032324ef015da562e57a5dcd
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - run: rustup component add rustfmt
+      - run: rustup component add clippy
+      - run: cargo install sqlx-cli
+
+      - uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
+
+      - name: Wait for PostgreSQL
+        run: until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do sleep 1; done
+
+      - name: Run SQLx migrations
+        run: cargo sqlx database create && sqlx migrate run
+
+      - name: Check .sqlx files
+        run: cargo sqlx prepare --check -- --tests
+
+      - name: Build
+        run: cargo build --workspace --all-targets
+
+      - name: Lint code
+        run: cargo clippy --all-targets --all-features --workspace
+
+      - name: Check formatting
+        run: cargo fmt --check --all
+
+  cargo-deny:
+    name: cargo-deny
+    runs-on: ubuntu-24.04
+    needs: changed-files
+    if: github.event_name != 'pull_request' || needs.changed-files.outputs.rust-lockfile == 'true'
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
+
+      - run: cargo install cargo-deny --vers ${{ env.CARGO_DENY_VERSION }}
+      - run: cargo deny check

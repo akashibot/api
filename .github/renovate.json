@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":pinAllExceptPeerDependencies",
+    ":maintainLockFilesWeekly",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone",
+    ":semanticCommitsDisabled",
+    ":automergeLinters",
+    ":automergeTesters",
+    "customManagers:dockerfileVersions",
+    "customManagers:githubActionsVersions",
+    "github>Turbo87/renovate-config//rust/updateToolchain"
+  ],
+  "labels": [
+    "📦 type: update deps"
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": [
+        "/^diesel$/",
+        "/^diesel_/"
+      ],
+      "groupName": "diesel packages"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+[package]
+name = "akashi-api"
+authors = ["Chiko chiko@envs.net (original)"]
+version = "0.0.0"
+edition = "2021"
+build = "build.rs"
+
+[workspace.lints.rust]
+future_incompatible = "warn"
+nonstandard_style = "warn"
+rust_2018_idioms = "warn"
+rust_2018_compatibility = "warn"
+rust_2021_compatibility = "warn"
+unused = "warn"
+
+[workspace.lints.rustdoc]
+unescaped_backticks = "warn"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+
+[lints]
+workspace = true
+
+[dependencies]
+# Environment
+dotenvy = "=0.15.7"
+crates_io_env_vars = { git = "https://github.com/rust-lang/crates.io.git", rev = "5226c1277e457ce05db59b9a3395537a48dd0f2b" }
+
+# Logging
+tracing = "=0.1.41"
+tracing-subscriber = { version = "=0.3.19", features = ["env-filter", "json"] }
+json-subscriber = "=0.2.4"
+
+# Errors
+anyhow = "=1.0.94"
+thiserror = "=2.0.9"
+
+# Serialization
+serde = { version = "=1.0.216", features = ["derive"] }
+serde_json = "=1.0.134"
+
+# Async
+futures = "=0.3.31"
+tokio = { version = "=1.42.0", features = ["full"] }
+arc-swap = "=1.7.1"
+
+# Web
+hyper = "=1.5.2"
+axum = { version = "=0.7.9", features = ["macros", "matched-path"] }
+cookie = { version = "=0.18.1", features = ["secure"] }
+derive_more = { version = "=1.0.0", features = [
+  "deref",
+  "deref_mut",
+  "display",
+] }
+axum-extra = { version = "=0.9.6", features = [
+  "cookie-signed",
+  "erased-json",
+  "typed-header",
+] }
+tower = { version = "=0.5.2", features = ["limit"] }
+tower-http = { version = "=0.6.2", features = [
+  "add-extension",
+  "fs",
+  "catch-panic",
+  "timeout",
+  "compression-full",
+] }
+jsonwebtoken = "=9.3.0"
+url = "=2.5.4"
+reqwest = { version = "=0.12.9", features = [
+  "json",
+  "gzip",
+  "blocking",
+  "rustls-tls",
+], default-features = false }
+http = "=1.2.0"
+ipnetwork = "=0.20.0"
+oauth2 = "=4.4.2"
+parking_lot = "=0.12.3"
+rand = "=0.8.5"
+validator = { version = "=0.19.0", features = ["derive"] }
+axum-valid = "=0.21.0"
+
+# Cryptography
+hmac = "=0.12.1"
+hex = "=0.4.3"
+secrecy = "=0.10.3"
+
+# Database
+sqlx = { version = "=0.8.2", features = [
+  "runtime-tokio",
+  "tls-rustls",
+  "postgres",
+  "chrono",
+  "bigdecimal",
+] }
+
+# Time
+chrono = "=0.4.39"
+
+itertools = "=0.13.0"
+
+[dev-dependencies]
+insta = "=1.41.1"
+derive_builder = "=0.20.2"
+wiremock = "=0.6.2"
+base64 = "=0.22.1"
+tracing-test = "=0.2.5"
+regex = "=1.11.1"
+parking_lot = "=0.12.3"
+thread_local = "=1.1.8"
+claims = "=0.8.0"
+
+[profile.release]
+debug = 1
