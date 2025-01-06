@@ -13,8 +13,6 @@ use tracing::error;
 use crate::middleware::log_request::ErrorField;
 
 pub(crate) use json::custom;
-pub use json::TOKEN_FORMAT_ERROR;
-// pub(crate) use json::{custom, InsecurelyGeneratedTokenRevoked, ReadOnlyMode};
 
 pub type BoxedAppError = Box<dyn AppError>;
 
@@ -28,7 +26,7 @@ pub fn forbidden(detail: impl Into<Cow<'static, str>>) -> BoxedAppError {
 }
 
 pub fn not_found() -> BoxedAppError {
-    custom(StatusCode::NOT_FOUND, "Item not found")
+    custom(StatusCode::NOT_FOUND, "not found")
 }
 
 /// Returns an error with status 500 and the provided description as JSON
@@ -114,8 +112,8 @@ where
     }
 }
 
-impl From<::url::ParseError> for BoxedAppError {
-    fn from(err: ::url::ParseError) -> BoxedAppError {
+impl From<url::ParseError> for BoxedAppError {
+    fn from(err: url::ParseError) -> BoxedAppError {
         Box::new(err)
     }
 }

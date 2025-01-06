@@ -7,24 +7,24 @@ use serde_json::{json, Value};
 use validator::Validate;
 
 #[derive(Debug, Deserialize, Validate)]
-pub struct CreateGuild {
+pub struct CreateUser {
     pub id: String,
 }
 
-/// Handles the requests for creating a Guild.
+/// Handles the requests for creating an User.
 /// 
-/// `POST /guilds`
+/// `POST /users`
 pub async fn create(
     app: AppState,
     _req: Parts,
-    Valid(Json(guild)): Valid<Json<CreateGuild>>,
+    Valid(Json(user)): Valid<Json<CreateUser>>,
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let guild = db
-        .create_guild(guild.id)
+    let user = db
+        .create_user(user.id)
         .await
-        .map_err(|_| bad_request("guild already exists"))?;
+        .map_err(|_| bad_request("user already exists"))?;
 
-    Ok(Json(json!(guild)))
+    Ok(Json(json!(user)))
 }

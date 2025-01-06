@@ -5,7 +5,7 @@ use tracing_subscriber::{prelude::*, EnvFilter, Layer};
 /// Initializes the `tracing` logging framework.
 ///
 /// Regular CLI output is influenced by the optional
-/// [`RUST_LOG`](tracing_subscriber::filter::EnvFilter) environment variable
+/// [`RUST_LOG`](EnvFilter) environment variable
 /// and is showing all `INFO` level events by default.
 ///
 /// This function also sets up the Sentry error reporting integration for the

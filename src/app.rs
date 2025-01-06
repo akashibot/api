@@ -1,6 +1,6 @@
 use crate::config;
 use crate::database::PgDbClient;
-use axum::extract::{FromRef, FromRequestParts, State};
+use axum::extract::{FromRequestParts, State};
 use derive_more::Deref;
 use reqwest::Client as ReqwestClient;
 use std::sync::Arc;
@@ -20,6 +20,10 @@ impl App {
             db: Arc::new(db),
             http,
         }
+    }
+    
+    pub fn database(&self) -> Arc<PgDbClient> {
+        Arc::clone(&self.db)
     }
 }
 

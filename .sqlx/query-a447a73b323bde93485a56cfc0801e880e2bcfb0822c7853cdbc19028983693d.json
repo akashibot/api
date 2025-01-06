@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n        SELECT id, plan, created_at\n        FROM guilds\n        WHERE id = $1\n        ",
+  "query": "\n        INSERT INTO guilds (id, created_at, commands_ran)\n        VALUES ($1, $2, $3)\n        RETURNING id, commands_ran, created_at\n        ",
   "describe": {
     "columns": [
       {
@@ -10,8 +10,8 @@
       },
       {
         "ordinal": 1,
-        "name": "plan",
-        "type_info": "Text"
+        "name": "commands_ran",
+        "type_info": "Int8"
       },
       {
         "ordinal": 2,
@@ -21,14 +21,16 @@
     ],
     "parameters": {
       "Left": [
-        "Text"
+        "Text",
+        "Timestamp",
+        "Int8"
       ]
     },
     "nullable": [
       false,
-      false,
-      false
+      true,
+      true
     ]
   },
-  "hash": "bdc83489dabfb5710b80d38b754da8d79f117483993b8fc45ee86b5da77a0f9f"
+  "hash": "a447a73b323bde93485a56cfc0801e880e2bcfb0822c7853cdbc19028983693d"
 }

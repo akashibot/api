@@ -8,27 +8,27 @@ use serde_json::{json, Value};
 use validator::Validate;
 
 #[derive(Debug, Deserialize, Validate)]
-pub struct GetGuild {
+pub struct GetUser {
     pub id: String,
 }
 
-/// Handles the requests for retrieving a Guild.
+/// Handles the requests for retrieving a User.
 /// 
-/// `GET /guilds/:id`
+/// `GET /users/:id`
 pub async fn metadata(
     app: AppState,
     _req: Parts,
-    Valid(Path(guild)): Valid<Path<GetGuild>>,
+    Valid(Path(user)): Valid<Path<GetUser>>,
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let guild = db.get_guild(guild.id).await.map_err(|_| {
+    let user = db.get_user(user.id).await.map_err(|_| {
         not_found()
     })?;
-
-    if let Some(guild) = guild {
-        return Ok(Json(json!(guild)));
+    
+    if let Some(user) = user {
+        return Ok(Json(json!(user)));
     }
-
+    
     Err(not_found())
 }

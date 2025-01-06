@@ -8,27 +8,23 @@ use serde_json::{json, Value};
 use validator::Validate;
 
 #[derive(Debug, Deserialize, Validate)]
-pub struct GetGuild {
+pub struct DeleteGuild {
     pub id: String,
 }
 
-/// Handles the requests for retrieving a Guild.
+/// Handles the requests for deleting a Guild.
 /// 
-/// `GET /guilds/:id`
-pub async fn metadata(
+/// `DELETE /guilds/:id`
+pub async fn delete(
     app: AppState,
     _req: Parts,
-    Valid(Path(guild)): Valid<Path<GetGuild>>,
+    Valid(Path(guild)): Valid<Path<DeleteGuild>>,
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let guild = db.get_guild(guild.id).await.map_err(|_| {
-        not_found()
-    })?;
+     db.delete_guild(guild.id).await.map_err(|_| not_found())?;
 
-    if let Some(guild) = guild {
-        return Ok(Json(json!(guild)));
-    }
-
-    Err(not_found())
+    Ok(Json(json!({
+        "message": "guild deleted"
+    })))
 }

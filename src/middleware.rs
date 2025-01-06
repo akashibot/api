@@ -6,7 +6,6 @@ pub mod normalize_path;
 pub mod real_ip;
 pub mod simple_auth;
 
-// use ::sentry::integrations::tower as sentry_tower;
 use axum::middleware::{from_fn, from_fn_with_state};
 use axum::Router;
 use axum_extra::either::Either;

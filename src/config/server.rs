@@ -4,7 +4,6 @@ use crate::Env;
 use anyhow::anyhow;
 use anyhow::Context;
 use axum::http::HeaderValue;
-use crates_io_env_vars::required_var;
 use crates_io_env_vars::{list, list_parsed, var, var_parsed};
 use ipnetwork::IpNetwork;
 use std::collections::HashSet;
