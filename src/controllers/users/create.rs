@@ -12,7 +12,7 @@ pub struct CreateUser {
 }
 
 /// Handles the requests for creating an User.
-/// 
+///
 /// `POST /users`
 pub async fn create(
     app: AppState,

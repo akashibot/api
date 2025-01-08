@@ -17,7 +17,7 @@ const CORE_THREADS: usize = 2;
 
 fn main() -> anyhow::Result<()> {
     akashi_api::util::tracing::init();
-    
+
     let config = akashi_api::config::Server::from_environment()?;
 
     let mut builder = tokio::runtime::Builder::new_multi_thread();

@@ -12,7 +12,7 @@ pub struct CreateGuild {
 }
 
 /// Handles the requests for creating a Guild.
-/// 
+///
 /// `POST /guilds`
 pub async fn create(
     app: AppState,

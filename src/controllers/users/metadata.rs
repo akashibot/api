@@ -13,7 +13,7 @@ pub struct GetUser {
 }
 
 /// Handles the requests for retrieving a User.
-/// 
+///
 /// `GET /users/:id`
 pub async fn metadata(
     app: AppState,
@@ -22,13 +22,11 @@ pub async fn metadata(
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let user = db.get_user(user.id).await.map_err(|_| {
-        not_found()
-    })?;
-    
+    let user = db.get_user(user.id).await.map_err(|_| not_found())?;
+
     if let Some(user) = user {
         return Ok(Json(json!(user)));
     }
-    
+
     Err(not_found())
 }

@@ -2,8 +2,8 @@ use crate::app::AppState;
 use axum::routing::{get, post};
 use axum::Router;
 
-pub mod metadata;
 pub mod create;
+pub mod metadata;
 
 // todo: add update and delete (users)
 

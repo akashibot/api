@@ -1,6 +1,6 @@
-use axum::Router;
-use axum::routing::{delete, get, patch, post};
 use crate::app::AppState;
+use axum::routing::{delete, get, patch, post};
+use axum::Router;
 
 pub mod create;
 pub mod delete;

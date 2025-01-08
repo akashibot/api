@@ -28,9 +28,10 @@ pub async fn metadata(
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let tag = db.get_tag(tag_path.guild_id, tag_body.name).await.map_err(|_| {
-        not_found()
-    })?;
+    let tag = db
+        .get_tag(tag_path.guild_id, tag_body.name)
+        .await
+        .map_err(|_| not_found())?;
 
     if let Some(tag) = tag {
         return Ok(Json(json!(tag)));

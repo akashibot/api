@@ -13,7 +13,7 @@ pub struct GetGuild {
 }
 
 /// Handles the requests for retrieving a Guild.
-/// 
+///
 /// `GET /guilds/:id`
 pub async fn metadata(
     app: AppState,
@@ -22,9 +22,7 @@ pub async fn metadata(
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let guild = db.get_guild(guild.id).await.map_err(|_| {
-        not_found()
-    })?;
+    let guild = db.get_guild(guild.id).await.map_err(|_| not_found())?;
 
     if let Some(guild) = guild {
         return Ok(Json(json!(guild)));

@@ -13,7 +13,7 @@ pub struct UpdateGuildPath {
 }
 
 /// Handles the requests for updating a Guild.
-/// 
+///
 /// `PATCH /guilds/:id`
 pub async fn update(
     app: AppState,

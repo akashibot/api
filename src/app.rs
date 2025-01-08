@@ -21,7 +21,7 @@ impl App {
             http,
         }
     }
-    
+
     pub fn database(&self) -> Arc<PgDbClient> {
         Arc::clone(&self.db)
     }

@@ -13,7 +13,7 @@ pub struct DeleteGuild {
 }
 
 /// Handles the requests for deleting a Guild.
-/// 
+///
 /// `DELETE /guilds/:id`
 pub async fn delete(
     app: AppState,
@@ -22,7 +22,7 @@ pub async fn delete(
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-     db.delete_guild(guild.id).await.map_err(|_| not_found())?;
+    db.delete_guild(guild.id).await.map_err(|_| not_found())?;
 
     Ok(Json(json!({
         "message": "guild deleted"

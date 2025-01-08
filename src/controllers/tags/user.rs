@@ -22,9 +22,10 @@ pub async fn metadata(
 ) -> AppResult<Json<Value>> {
     let db = app.database();
 
-    let tags = db.get_user_tags(tag_body.user_id, tag_body.guild_id).await.map_err(|_| {
-        not_found()
-    })?;
+    let tags = db
+        .get_user_tags(tag_body.user_id, tag_body.guild_id)
+        .await
+        .map_err(|_| not_found())?;
 
     if tags.is_empty() {
         return Err(bad_request("no tags found for this user"));

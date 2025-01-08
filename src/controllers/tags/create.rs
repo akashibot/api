@@ -11,7 +11,7 @@ pub struct CreateTag {
     pub guild_id: String,
     pub name: String,
     pub user_id: String,
-    pub content: String
+    pub content: String,
 }
 
 /// Creates a new tag.
@@ -25,12 +25,7 @@ pub async fn create(
     let db = app.database();
 
     let tag = db
-        .create_tag(
-            tag.guild_id,
-            tag.name,
-            tag.content,
-            tag.user_id
-        )
+        .create_tag(tag.guild_id, tag.name, tag.content, tag.user_id)
         .await
         .map_err(|_| bad_request("tag already exists in this guild"))?;
 

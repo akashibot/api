@@ -28,7 +28,7 @@ pub(crate) async fn create_guild(
 /// Updates a guild in the database.
 pub(crate) async fn update_guild(
     executor: impl PgExecutor<'_>,
-    id: String
+    id: String,
 ) -> anyhow::Result<GuildModel> {
     let guild = sqlx::query_as!(
         GuildModel,
@@ -68,10 +68,7 @@ pub(crate) async fn get_guild(
 }
 
 /// Deletes a guild from the database.
-pub(crate) async fn delete_guild(
-    executor: impl PgExecutor<'_>,
-    id: String,
-) -> anyhow::Result<()> {
+pub(crate) async fn delete_guild(executor: impl PgExecutor<'_>, id: String) -> anyhow::Result<()> {
     sqlx::query!(
         r#"
         DELETE FROM guilds
